@@ -351,7 +351,7 @@ class Easemob {
 			exit ();
 		}
 		$result = $this->postCurl ( $url, $option, $head = 0 );
-		$result = json_decode($result);
+		$result = json_decode($result, true);
 		$result ['expires_in'] = $result ['expires_in'] + time ();
 		$fp = @fopen ( "easemob.txt", 'w' );
 		@fwrite ( $fp, serialize ( $result ) );
@@ -373,7 +373,9 @@ class Easemob {
 			curl_setopt ( $curl, CURLOPT_POSTFIELDS, $options ); // Post提交的数据包
 		}
 		curl_setopt ( $curl, CURLOPT_TIMEOUT, 30 ); // 设置超时限制防止死循环
-		curl_setopt ( $curl, CURLOPT_HTTPHEADER, $header ); // 设置HTTP头
+		if (is_array($header)){
+			curl_setopt ( $curl, CURLOPT_HTTPHEADER, $header ); // 设置HTTP头
+		}
 		curl_setopt ( $curl, CURLOPT_RETURNTRANSFER, 1 ); // 获取的信息以文件流的形式返回
 		curl_setopt ( $curl, CURLOPT_CUSTOMREQUEST, $type );
 		$result = curl_exec ( $curl ); // 执行操作
